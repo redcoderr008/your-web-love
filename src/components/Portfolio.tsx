@@ -50,28 +50,28 @@ const Portfolio = () => {
 
   const projects = [
     {
-      title: "E-Commerce Platform",
-      description: "A full-stack e-commerce solution with payment integration, user authentication, and admin dashboard.",
-      techStack: ["React", "Node.js", "MongoDB", "Stripe", "JWT"],
-      github: "https://github.com/username/ecommerce",
-      demo: "https://ecommerce-demo.com",
-      image: "🛒"
+      title: "Portfolio Website",
+      description: "A personal portfolio built with modern web technologies to showcase my work, skills, and experiences.",
+      techStack: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+      github: "https://github.com/redcoder-008",
+      demo: "https://www.karankamat.com.np",
+      image: "👨‍💻"
     },
     {
-      title: "Task Management App",
-      description: "Real-time collaborative task management application with drag-and-drop functionality.",
-      techStack: ["React", "Socket.io", "Express", "PostgreSQL", "Redis"],
-      github: "https://github.com/username/taskmanager",
-      demo: "https://taskmanager-demo.com",
-      image: "📋"
+      title: "Daily Track",
+      description: "A web and mobile app that helps users track daily expenses, manage to-do lists, scan bills, and write notes.",
+      techStack: ["React", "Node.js", "MongoDB", "Mobile App"],
+      github: "https://github.com/redcoder-008",
+      demo: "https://daily-track-eight.vercel.app/",
+      image: "📱"
     },
     {
-      title: "Weather Dashboard",
-      description: "Interactive weather dashboard with location-based forecasts and beautiful data visualizations.",
-      techStack: ["Vue.js", "D3.js", "OpenWeather API", "Chart.js"],
-      github: "https://github.com/username/weather",
-      demo: "https://weather-demo.com",
-      image: "🌤️"
+      title: "Pop Mitra",
+      description: "An AI-powered application that generates titles, descriptions, and hashtags using the Gemini API based on profile details.",
+      techStack: ["React", "Gemini API", "AI/ML", "JavaScript"],
+      github: "https://github.com/redcoder-008",
+      demo: "https://popmitra.vercel.app/",
+      image: "🤖"
     }
   ];
 
@@ -103,13 +103,13 @@ const Portfolio = () => {
         <div className="container-custom relative z-10">
           <div className="fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Karan <span className="hero-text-gradient">Kewat</span>
+              Karan Kumar <span className="hero-text-gradient">Kamat</span>
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-4 font-medium">
-              Full Stack Developer | MERN Stack Enthusiast
+              Computer Engineering Graduate | MERN Stack Developer
             </p>
             <p className="text-lg text-blue-200 mb-12 max-w-2xl mx-auto">
-              Passionate about creating beautiful, functional web applications that solve real-world problems
+              Passionate about coding, problem-solving, and building applications that make life easier using modern technologies and AI
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up-delay">
               <Button className="btn-hero">
@@ -137,18 +137,18 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="fade-in-up">
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  I'm a passionate Full Stack Developer with expertise in modern web technologies 
-                  and a keen eye for creating exceptional digital experiences. I specialize in the 
-                  MERN stack and love building scalable applications that solve real-world problems.
+                  Hi, I'm Karan Kumar Kamat from Dhanpalthan-7, Morang, Nepal. I recently completed 
+                  my Diploma in Computer Engineering and am passionate about coding, problem-solving, 
+                  and building applications that make life easier.
                 </p>
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  My journey in web development started with a curiosity for how things work behind 
-                  the scenes. Today, I focus on creating clean, efficient code and user-friendly 
-                  interfaces that provide seamless experiences across all devices.
+                  I have knowledge of programming languages such as Java, C++, and Python, and also 
+                  have basic experience with the MERN stack. I enjoy learning new technologies and 
+                  exploring how AI can be used to create innovative solutions.
                 </p>
                 <p className="text-lg text-muted-foreground mb-8 text-left">
-                  When I'm not coding, you can find me exploring new technologies, contributing 
-                  to open source projects, or sharing insights about development on social media.
+                  Through my projects, I have gained practical experience and experimented with using 
+                  AI tools to build functional and useful applications that solve real-world problems.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button className="btn-hero">
@@ -275,7 +275,7 @@ const Portfolio = () => {
                     </div>
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-muted-foreground">karan.developer@email.com</p>
+                      <p className="text-muted-foreground">redcoder008@gmail.com</p>
                     </div>
                   </div>
                   
@@ -404,7 +404,7 @@ const Portfolio = () => {
         <div className="container-custom">
           <div className="text-center">
             <p className="text-muted-foreground">
-              © 2024 Karan Kewat. Built with React & Tailwind CSS.
+              © 2024 Karan Kumar Kamat. Built with React & Tailwind CSS.
             </p>
           </div>
         </div>
