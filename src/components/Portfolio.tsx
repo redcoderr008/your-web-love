@@ -103,13 +103,13 @@ const Portfolio = () => {
         <div className="container-custom relative z-10">
           <div className="fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Karan Kumar <span className="hero-text-gradient">Kamat</span>
+              Hi, It's <span className="hero-text-gradient">Karan</span>
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-4 font-medium">
-              Computer Engineering Graduate | MERN Stack Developer
+              I'm a Student
             </p>
             <p className="text-lg text-blue-200 mb-12 max-w-2xl mx-auto">
-              Passionate about coding, problem-solving, and building applications that make life easier using modern technologies and AI
+              Hello! I'm Karan Kumar Kamat from Dhanpalthan-7, Kamalpur, Nepal. Currently, I'm pursuing a Diploma in Computer Engineering at Adarsha Secondary School in Biratnagar-7.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up-delay">
               <Button className="btn-hero">
@@ -137,18 +137,16 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="fade-in-up">
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  Hi, I'm Karan Kumar Kamat from Dhanpalthan-7, Morang, Nepal. I recently completed 
-                  my Diploma in Computer Engineering and am passionate about coding, problem-solving, 
-                  and building applications that make life easier.
+                  I'm a passionate developer mastering Data Structures & Algorithms with Java. I 
+                  believe clean code and optimized algorithms can solve real-world problems.
                 </p>
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  I have knowledge of programming languages such as Java, C++, and Python, and also 
-                  have basic experience with the MERN stack. I enjoy learning new technologies and 
-                  exploring how AI can be used to create innovative solutions.
+                  When I'm not cracking coding problems, you'll find me: • Solving challenges on 
+                  LeetCode & CodeChef • Building projects to sharpen my skills • Sharing my DSA 
+                  learning journey
                 </p>
                 <p className="text-lg text-muted-foreground mb-8 text-left">
-                  Through my projects, I have gained practical experience and experimented with using 
-                  AI tools to build functional and useful applications that solve real-world problems.
+                  My Tech Toolkit: Java | Data Structures | Algorithms | OOP | Problem Solving |
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Button className="btn-hero">
