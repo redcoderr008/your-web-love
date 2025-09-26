@@ -17,7 +17,9 @@ import {
   Server,
   Cpu,
   ArrowDown,
-  Send
+  Send,
+  MessageCircle,
+  Twitter
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-bg.jpg";
@@ -101,7 +103,7 @@ const Portfolio = () => {
         <div className="container-custom relative z-10">
           <div className="fade-in-up">
             <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              John <span className="hero-text-gradient">Developer</span>
+              Karan <span className="hero-text-gradient">Kewat</span>
             </h1>
             <p className="text-xl md:text-2xl text-blue-100 mb-4 font-medium">
               Full Stack Developer | MERN Stack Enthusiast
@@ -133,20 +135,27 @@ const Portfolio = () => {
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-8 fade-in-up">About Me</h2>
             <div className="grid md:grid-cols-2 gap-12 items-center">
-              <div className="fade-in-up">
+            <div className="fade-in-up">
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  I'm a passionate Full Stack Developer with 3+ years of experience building 
-                  modern web applications. I specialize in the MERN stack and love creating 
-                  user-friendly interfaces that provide exceptional user experiences.
+                  I'm a passionate Full Stack Developer with expertise in modern web technologies 
+                  and a keen eye for creating exceptional digital experiences. I specialize in the 
+                  MERN stack and love building scalable applications that solve real-world problems.
+                </p>
+                <p className="text-lg text-muted-foreground mb-6 text-left">
+                  My journey in web development started with a curiosity for how things work behind 
+                  the scenes. Today, I focus on creating clean, efficient code and user-friendly 
+                  interfaces that provide seamless experiences across all devices.
                 </p>
                 <p className="text-lg text-muted-foreground mb-8 text-left">
                   When I'm not coding, you can find me exploring new technologies, contributing 
-                  to open source projects, or sharing my knowledge through technical blog posts.
+                  to open source projects, or sharing insights about development on social media.
                 </p>
-                <Button className="btn-hero w-full sm:w-auto">
-                  <Download className="w-4 h-4 mr-2" />
-                  Download Resume
-                </Button>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <Button className="btn-hero">
+                    <Download className="w-4 h-4 mr-2" />
+                    Download Resume
+                  </Button>
+                </div>
               </div>
               
               <div className="fade-in-up-delay">
@@ -266,7 +275,7 @@ const Portfolio = () => {
                     </div>
                     <div>
                       <p className="font-medium">Email</p>
-                      <p className="text-muted-foreground">john.developer@email.com</p>
+                      <p className="text-muted-foreground">karan.developer@email.com</p>
                     </div>
                   </div>
                   
@@ -276,7 +285,14 @@ const Portfolio = () => {
                     </div>
                     <div>
                       <p className="font-medium">GitHub</p>
-                      <p className="text-muted-foreground">github.com/johndeveloper</p>
+                      <a 
+                        href="https://github.com/redcoder-008" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        github.com/redcoder-008
+                      </a>
                     </div>
                   </div>
                   
@@ -286,7 +302,48 @@ const Portfolio = () => {
                     </div>
                     <div>
                       <p className="font-medium">LinkedIn</p>
-                      <p className="text-muted-foreground">linkedin.com/in/johndeveloper</p>
+                      <a 
+                        href="https://www.linkedin.com/in/krnkmt/" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        linkedin.com/in/krnkmt
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-accent/10 rounded-full flex items-center justify-center">
+                      <Twitter className="w-6 h-6 text-accent" />
+                    </div>
+                    <div>
+                      <p className="font-medium">Twitter</p>
+                      <a 
+                        href="https://x.com/karankewat_008" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-accent transition-colors"
+                      >
+                        @karankewat_008
+                      </a>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-green-500/10 rounded-full flex items-center justify-center">
+                      <MessageCircle className="w-6 h-6 text-green-500" />
+                    </div>
+                    <div>
+                      <p className="font-medium">WhatsApp Support</p>
+                      <a 
+                        href="https://wa.me/9779804005610" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="text-muted-foreground hover:text-green-500 transition-colors"
+                      >
+                        +977 980-400-5610
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -347,7 +404,7 @@ const Portfolio = () => {
         <div className="container-custom">
           <div className="text-center">
             <p className="text-muted-foreground">
-              © 2024 John Developer. Built with React & Tailwind CSS.
+              © 2024 Karan Kewat. Built with React & Tailwind CSS.
             </p>
           </div>
         </div>
