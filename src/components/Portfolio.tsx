@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-bg.jpg";
+import karanPhoto from "@/assets/karan-photo.jpg";
 
 const Portfolio = () => {
   const { toast } = useToast();
@@ -91,34 +92,81 @@ const Portfolio = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section 
-        className="relative min-h-screen flex items-center justify-center text-center section-spacing"
-        style={{
-          backgroundImage: `linear-gradient(rgba(30, 58, 138, 0.8), rgba(30, 58, 138, 0.9)), url(${heroImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed'
-        }}
-      >
+      <section className="relative min-h-screen bg-background section-spacing">
         <div className="container-custom relative z-10">
-          <div className="fade-in-up">
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6">
-              Hi, It's <span className="hero-text-gradient">Karan</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-4 font-medium">
-              I'm a Student
-            </p>
-            <p className="text-lg text-blue-200 mb-12 max-w-2xl mx-auto">
-              Hello! I'm Karan Kumar Kamat from Dhanpalthan-7, Kamalpur, Nepal. Currently, I'm pursuing a Diploma in Computer Engineering at Adarsha Secondary School in Biratnagar-7.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center fade-in-up-delay">
-              <Button className="btn-hero">
-                View My Work
-              </Button>
-              <Button className="btn-outline-hero">
-                <Download className="w-4 h-4 mr-2" />
-                Download Resume
-              </Button>
+          <div className="grid md:grid-cols-2 gap-12 items-center min-h-screen">
+            {/* Left side - Text content */}
+            <div className="fade-in-up">
+              <div className="mb-8">
+                <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
+                  Karan Kumar <span className="text-primary">Kamat</span>
+                </h1>
+                <div className="flex items-center gap-1 mb-6">
+                  <span className="text-primary bg-primary/10 px-3 py-1 rounded-full border border-primary/20">
+                    Home
+                  </span>
+                  <span className="text-muted-foreground">Education</span>
+                  <span className="text-muted-foreground">Services</span>
+                  <span className="text-muted-foreground">Team</span>
+                  <span className="text-muted-foreground">Contact</span>
+                </div>
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+                Hi, It's <span className="text-primary">Karan</span>
+              </h2>
+              <p className="text-2xl text-primary mb-8 font-medium">
+                I'm a <span className="text-primary">Student</span>
+              </p>
+              
+              <div className="text-muted-foreground space-y-4 mb-8">
+                <p>Hello! I'm Karan Kumar Kamat from Dhanpalthan-7, Kamalpur, Nepal. Currently, I'm pursuing a Diploma in Computer Engineering at Adarsha Secondary School in Biratnagar-7.</p>
+                <p>I'm a passionate developer mastering Data Structures & Algorithms with Java. I believe clean code and optimized algorithms can solve real-world problems. When I'm not cracking coding problems, you'll find me: • Solving challenges on LeetCode & CodeChef • Building projects to sharpen my skills • Sharing my DSA learning journey</p>
+                <p><strong>My Tech Toolkit:</strong> Java | Data Structures | Algorithms | OOP | Problem Solving |</p>
+              </div>
+
+              {/* Social Links */}
+              <div className="flex gap-4 mb-8">
+                <a href="https://www.linkedin.com/in/krnkmt/" target="_blank" rel="noopener noreferrer" 
+                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors">
+                  <Linkedin className="w-5 h-5" />
+                </a>
+                <a href="https://github.com/redcoder-008" target="_blank" rel="noopener noreferrer"
+                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors">
+                  <Github className="w-5 h-5" />
+                </a>
+                <a href="https://wa.me/9779804005610" target="_blank" rel="noopener noreferrer"
+                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors">
+                  <MessageCircle className="w-5 h-5" />
+                </a>
+                <a href="https://x.com/karankewat_008" target="_blank" rel="noopener noreferrer"
+                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors">
+                  <Twitter className="w-5 h-5" />
+                </a>
+              </div>
+              
+              <div className="flex gap-4">
+                <Button className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-3 rounded-full">
+                  Hire
+                </Button>
+                <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-full">
+                  Contact
+                </Button>
+              </div>
+            </div>
+            
+            {/* Right side - Profile photo */}
+            <div className="fade-in-up-delay flex justify-center">
+              <div className="relative">
+                <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
+                  <img 
+                    src={karanPhoto} 
+                    alt="Karan Kumar Kamat - Computer Engineering Student" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-primary via-primary/50 to-transparent opacity-20 animate-pulse"></div>
+              </div>
             </div>
           </div>
         </div>
