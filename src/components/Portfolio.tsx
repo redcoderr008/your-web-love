@@ -111,8 +111,8 @@ const Portfolio = () => {
               
               <div className="text-muted-foreground space-y-4 mb-8">
                 <p>Hello! I'm Karan Kumar Kamat from Dhanpalthan-7, Kamalpur, Nepal. I completed  Diploma in Computer Engineering from Adarsha Secondary School which is located at Biratnagar-7.</p>
-                <p>I'm a passionate developer mastering Data Structures & Algorithms with Java. I believe clean code and optimized algorithms can solve real-world problems. When I'm not cracking coding problems, you'll find me: • Solving challenges on LeetCode & CodeChef • Building projects to sharpen my skills • Sharing my DSA learning journey</p>
-                <p><strong>My Tech Toolkit:</strong> Java | Data Structures | Algorithms | OOP | Problem Solving |</p>
+                <p className="text-base">Computer Engineering graduate passionate about solving complex problems with elegant solutions. I live for those "Aha!" moments when debugging code at 2 AM.</p>
+                <p className="text-base">When I'm not optimizing algorithms, you'll find me exploring the latest tech trends or building something cool that probably nobody asked for (but everyone ends up loving).</p>
               </div>
 
               {/* Social Links */}
