@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,49 @@ import { Github, Linkedin, Mail, ExternalLink, Download, Code, Database, Globe, 
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-bg.jpg";
 import karanPhoto from "@/assets/karan-photo.jpg";
+const TypedText = () => {
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [currentText, setCurrentText] = useState("");
+  const [isTyping, setIsTyping] = useState(true);
+  
+  const texts = ["Student", "Coder", "Web Developer", "Problem Solver"];
+  
+  useEffect(() => {
+    const currentFullText = texts[currentTextIndex];
+    
+    if (isTyping) {
+      if (currentText.length < currentFullText.length) {
+        const timeout = setTimeout(() => {
+          setCurrentText(currentFullText.slice(0, currentText.length + 1));
+        }, 100);
+        return () => clearTimeout(timeout);
+      } else {
+        const timeout = setTimeout(() => {
+          setIsTyping(false);
+        }, 2000);
+        return () => clearTimeout(timeout);
+      }
+    } else {
+      if (currentText.length > 0) {
+        const timeout = setTimeout(() => {
+          setCurrentText(currentText.slice(0, -1));
+        }, 50);
+        return () => clearTimeout(timeout);
+      } else {
+        setCurrentTextIndex((prevIndex) => (prevIndex + 1) % texts.length);
+        setIsTyping(true);
+      }
+    }
+  }, [currentText, currentTextIndex, isTyping, texts]);
+  
+  return (
+    <span className="text-primary">
+      {currentText}
+      <span className="animate-pulse">|</span>
+    </span>
+  );
+};
+
 const Portfolio = () => {
   const {
     toast
@@ -106,7 +149,7 @@ const Portfolio = () => {
                 Hi, It's <span className="text-primary">Karan</span>
               </h2>
               <p className="text-2xl text-primary mb-8 font-medium">
-                I'm a <span className="text-primary">Student</span>
+                I'm a <TypedText />
               </p>
               
               <div className="text-muted-foreground space-y-4 mb-8">
