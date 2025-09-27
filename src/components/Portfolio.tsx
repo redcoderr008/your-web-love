@@ -8,6 +8,9 @@ import { Github, Linkedin, Mail, ExternalLink, Download, Code, Database, Globe, 
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-bg.jpg";
 import karanPhoto from "@/assets/karan-photo.jpg";
+import AnimatedBackground from "./AnimatedBackground";
+import FloatingShapes from "./FloatingShapes";
+import CursorEffect from "./CursorEffect";
 const TypedText = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -131,7 +134,11 @@ const Portfolio = () => {
     name: "Docker",
     icon: <Server className="w-5 h-5" />
   }];
-  return <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background relative overflow-hidden">
+      {/* Cool Effects */}
+      <AnimatedBackground />
+      <FloatingShapes />
+      <CursorEffect />
       {/* Hero Section */}
       <section className="relative min-h-screen bg-background section-spacing">
         <div className="container-custom relative z-10">
@@ -140,7 +147,7 @@ const Portfolio = () => {
             <div className="fade-in-up">
               <div className="mb-8">
                 <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-                  Karan Kumar <span className="text-primary">Kamat</span>
+                  Karan Kumar <span className="gradient-text">Kamat</span>
                 </h1>
                 
               </div>
@@ -187,7 +194,7 @@ const Portfolio = () => {
             {/* Right side - Profile photo */}
             <div className="fade-in-up-delay flex justify-center">
               <div className="relative">
-                <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
+                <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl float-animation glow-animation">
                   <img src={karanPhoto} alt="Karan Kumar Kamat - Computer Engineering Student" className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-primary via-primary/50 to-transparent opacity-20 animate-pulse"></div>
