@@ -148,8 +148,8 @@ const Portfolio = () => {
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
                 Hi, It's <span className="text-primary">Karan</span>
               </h2>
-              <p className="text-2xl text-primary mb-8 font-medium">
-                I'm a <TypedText />
+              <p className="text-2xl mb-8 font-medium">
+                <span className="text-white">I'm a </span><TypedText />
               </p>
               
               <div className="text-muted-foreground space-y-4 mb-8">
