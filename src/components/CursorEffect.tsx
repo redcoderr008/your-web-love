@@ -1,88 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from "react";
 
-interface Trail {
-  id: number;
+interface Spark {
   x: number;
   y: number;
-  opacity: number;
+  size: number;
+  life: number;
+  el: HTMLDivElement | null;
+  color: string;
 }
 
-const CursorEffect = () => {
-  const [trails, setTrails] = useState<Trail[]>([]);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+const CursorSparkEffect = () => {
+  const sparks = useRef<Spark[]>([]);
 
   useEffect(() => {
-    let trailId = 0;
+    const colors = ["#ff3cac", "#784ba0", "#00f0ff", "#f9f586", "#ff5f6d"];
+    let mouseX = 0;
+    let mouseY = 0;
 
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePos({ x: e.clientX, y: e.clientY });
+      mouseX = e.clientX;
+      mouseY = e.clientY;
 
-      // Add new trail point
-      setTrails(prev => [
-        ...prev.slice(-10), // Keep only last 10 points
-        {
-          id: trailId++,
-          x: e.clientX,
-          y: e.clientY,
-          opacity: 1,
+      const spark: Spark = {
+        x: mouseX,
+        y: mouseY,
+        size: Math.random() * 6 + 4,
+        life: 1,
+        el: document.createElement("div"),
+        color: colors[Math.floor(Math.random() * colors.length)],
+      };
+
+      if (spark.el) {
+        spark.el.style.position = "absolute";
+        spark.el.style.left = `${spark.x}px`;
+        spark.el.style.top = `${spark.y}px`;
+        spark.el.style.width = `${spark.size}px`;
+        spark.el.style.height = `${spark.size}px`;
+        spark.el.style.backgroundColor = spark.color;
+        spark.el.style.borderRadius = "50%";
+        spark.el.style.pointerEvents = "none";
+        spark.el.style.opacity = "1";
+        spark.el.style.filter = "blur(3px)";
+        spark.el.style.transition = "transform 0.2s, opacity 0.3s";
+        document.body.appendChild(spark.el);
+      }
+
+      sparks.current.push(spark);
+
+      if (sparks.current.length > 50) {
+        const old = sparks.current.shift();
+        if (old && old.el) old.el.remove();
+      }
+    };
+
+    const animate = () => {
+      sparks.current.forEach((s) => {
+        s.life -= 0.03;
+        if (s.el) {
+          s.el.style.opacity = `${s.life}`;
+          // Only small random offset relative to current position
+          s.el.style.transform = `translate3d(${(Math.random() - 0.5) * 6}px, ${
+            (Math.random() - 0.5) * 6
+          }px, 0)`;
         }
-      ]);
+      });
+
+      sparks.current = sparks.current.filter((s) => s.life > 0);
+      requestAnimationFrame(animate);
     };
 
-    // Fade out trail points
-    const fadeInterval = setInterval(() => {
-      setTrails(prev => 
-        prev
-          .map(trail => ({ ...trail, opacity: trail.opacity - 0.1 }))
-          .filter(trail => trail.opacity > 0)
-      );
-    }, 50);
+    window.addEventListener("mousemove", handleMouseMove);
+    requestAnimationFrame(animate);
 
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      clearInterval(fadeInterval);
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  return (
-    <div className="fixed inset-0 pointer-events-none z-50">
-      {/* Main cursor */}
-      <div
-        className="fixed w-4 h-4 bg-primary rounded-full mix-blend-difference transition-transform duration-100 ease-out"
-        style={{
-          left: mousePos.x - 8,
-          top: mousePos.y - 8,
-          transform: 'scale(1)',
-        }}
-      />
-
-      {/* Trailing particles */}
-      {trails.map((trail, index) => (
-        <div
-          key={trail.id}
-          className="fixed w-2 h-2 bg-cyan-400 rounded-full"
-          style={{
-            left: trail.x - 4,
-            top: trail.y - 4,
-            opacity: trail.opacity * 0.6,
-            transform: `scale(${trail.opacity})`,
-            transition: 'all 0.1s ease-out',
-          }}
-        />
-      ))}
-
-      {/* Outer cursor ring */}
-      <div
-        className="fixed w-8 h-8 border-2 border-primary rounded-full transition-all duration-200 ease-out mix-blend-difference"
-        style={{
-          left: mousePos.x - 16,
-          top: mousePos.y - 16,
-        }}
-      />
-    </div>
-  );
+  return null; // System cursor visible
 };
 
-export default CursorEffect;
+export default CursorSparkEffect;
