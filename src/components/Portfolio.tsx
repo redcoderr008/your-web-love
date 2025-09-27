@@ -377,7 +377,7 @@ const Portfolio = () => {
         <div className="container-custom">
           <div className="text-center">
             <p className="text-muted-foreground">
-              © 2024 Karan Kumar Kamat. Built with React & Tailwind CSS.
+              © Karan Kumar Kamat. Built with React & Tailwind CSS.
             </p>
           </div>
         </div>
