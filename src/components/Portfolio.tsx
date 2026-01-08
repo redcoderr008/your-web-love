@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -26,6 +27,8 @@ import {
   Send,
   MessageCircle,
   Twitter,
+  Palette,
+  ArrowRight,
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import heroImage from "@/assets/hero-bg.jpg";
@@ -33,6 +36,24 @@ import karanPhoto from "@/assets/karan-photo.jpg";
 import AnimatedBackground from "./AnimatedBackground";
 import FloatingShapes from "./FloatingShapes";
 import CursorEffect from "./CursorEffect";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  tech_stack: string[];
+  github_url: string | null;
+  demo_url: string | null;
+  image_emoji: string;
+}
+
+interface GraphicsDesign {
+  id: string;
+  title: string;
+  image_url: string;
+  category: string;
+}
 const TypedText = () => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
@@ -103,35 +124,70 @@ const Portfolio = () => {
       message: "",
     });
   };
-  const projects = [
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [graphicsDesigns, setGraphicsDesigns] = useState<GraphicsDesign[]>([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .eq('is_visible', true)
+        .order('display_order');
+      
+      if (!error && data) {
+        setProjects(data);
+      }
+    };
+
+    const fetchGraphicsDesigns = async () => {
+      const { data, error } = await supabase
+        .from('graphics_designs')
+        .select('*')
+        .eq('is_visible', true)
+        .order('display_order')
+        .limit(6);
+      
+      if (!error && data) {
+        setGraphicsDesigns(data);
+      }
+    };
+
+    fetchProjects();
+    fetchGraphicsDesigns();
+  }, []);
+
+  const fallbackProjects = [
     {
+      id: '1',
       title: "Portfolio Website",
-      description:
-        "A personal portfolio built with modern web technologies to showcase my work, skills, and experiences.",
-      techStack: ["React", "TypeScript", "Tailwind CSS", "Vite"],
-      github: "https://github.com/redcoder-008",
-      demo: "https://www.karankamat.com.np",
-      image: "👨‍💻",
+      description: "A personal portfolio built with modern web technologies to showcase my work, skills, and experiences.",
+      tech_stack: ["React", "TypeScript", "Tailwind CSS", "Vite"],
+      github_url: "https://github.com/redcoder-008",
+      demo_url: "https://www.karankamat.com.np",
+      image_emoji: "👨‍💻",
     },
     {
+      id: '2',
       title: "Daily Track",
-      description:
-        "A web and mobile app that helps users track daily expenses, manage to-do lists, scan bills, and write notes.",
-      techStack: ["React", "Node.js", "MongoDB", "Mobile App"],
-      github: "https://github.com/redcoder-008",
-      demo: "https://daily-track-eight.vercel.app/",
-      image: "📱",
+      description: "A web and mobile app that helps users track daily expenses, manage to-do lists, scan bills, and write notes.",
+      tech_stack: ["React", "Node.js", "MongoDB", "Mobile App"],
+      github_url: "https://github.com/redcoder-008",
+      demo_url: "https://daily-track-eight.vercel.app/",
+      image_emoji: "📱",
     },
     {
+      id: '3',
       title: "Pop Mitra",
-      description:
-        "An AI-powered application that generates titles, descriptions, and hashtags using the Gemini API based on profile details.",
-      techStack: ["React", "Gemini API", "AI/ML", "JavaScript"],
-      github: "https://github.com/redcoder-008",
-      demo: "https://popmitra.vercel.app/",
-      image: "🤖",
+      description: "An AI-powered application that generates titles, descriptions, and hashtags using the Gemini API based on profile details.",
+      tech_stack: ["React", "Gemini API", "AI/ML", "JavaScript"],
+      github_url: "https://github.com/redcoder-008",
+      demo_url: "https://popmitra.vercel.app/",
+      image_emoji: "🤖",
     },
   ];
+
+  const displayProjects = projects.length > 0 ? projects : fallbackProjects;
   const skills = [
     {
       name: "JavaScript",
@@ -366,15 +422,15 @@ const Portfolio = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projects.map((project, index) => (
+            {displayProjects.map((project, index) => (
               <Card
-                key={index}
+                key={project.id}
                 className={`card-hover fade-in-up-${
                   index === 0 ? "" : index === 1 ? "delay" : "delay-2"
                 }`}
               >
                 <CardHeader>
-                  <div className="text-4xl mb-4">{project.image}</div>
+                  <div className="text-4xl mb-4">{project.image_emoji}</div>
                   <CardTitle className="text-xl">{project.title}</CardTitle>
                   <CardDescription className="text-base">
                     {project.description}
@@ -383,7 +439,7 @@ const Portfolio = () => {
                 <CardContent>
                   <div className="mb-6">
                     <div className="flex flex-wrap gap-2">
-                      {project.techStack.map((tech, techIndex) => (
+                      {project.tech_stack.map((tech, techIndex) => (
                         <Badge
                           key={techIndex}
                           variant="secondary"
@@ -396,31 +452,35 @@ const Portfolio = () => {
                   </div>
 
                   <div className="flex gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1"
-                      asChild
-                    >
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
+                    {project.github_url && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                        asChild
                       >
-                        <Github className="w-4 h-4 mr-2" />
-                        Code
-                      </a>
-                    </Button>
-                    <Button size="sm" className="flex-1" asChild>
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        Demo
-                      </a>
-                    </Button>
+                        <a
+                          href={project.github_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <Github className="w-4 h-4 mr-2" />
+                          Code
+                        </a>
+                      </Button>
+                    )}
+                    {project.demo_url && (
+                      <Button size="sm" className="flex-1" asChild>
+                        <a
+                          href={project.demo_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ExternalLink className="w-4 h-4 mr-2" />
+                          Demo
+                        </a>
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
@@ -428,6 +488,51 @@ const Portfolio = () => {
           </div>
         </div>
       </section>
+
+      {/* Graphics Design Section */}
+      {graphicsDesigns.length > 0 && (
+        <section id="graphics" className="section-spacing bg-surface">
+          <div className="container-custom">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold mb-4 fade-in-up flex items-center justify-center gap-3">
+                <Palette className="w-10 h-10 text-primary" />
+                Graphics Design
+              </h2>
+              <p className="text-xl text-muted-foreground fade-in-up-delay">
+                Some of my creative design work
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
+              {graphicsDesigns.map((design) => (
+                <Card key={design.id} className="overflow-hidden card-hover">
+                  <div className="aspect-video relative">
+                    <img
+                      src={design.image_url}
+                      alt={design.title}
+                      className="w-full h-full object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity flex items-end p-4">
+                      <div>
+                        <h3 className="text-white font-semibold">{design.title}</h3>
+                        <Badge variant="secondary" className="mt-1">{design.category}</Badge>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link to="/graphics">
+                <Button size="lg" className="gap-2">
+                  View Full Portfolio <ArrowRight className="w-4 h-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Skills Section */}
       <section id="skills" className="section-spacing bg-surface">
