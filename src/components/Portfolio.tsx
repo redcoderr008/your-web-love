@@ -37,6 +37,7 @@ import AnimatedBackground from "./AnimatedBackground";
 import FloatingShapes from "./FloatingShapes";
 import CursorEffect from "./CursorEffect";
 import { supabase } from "@/integrations/supabase/client";
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 interface Project {
   id: string;
@@ -54,14 +55,15 @@ interface GraphicsDesign {
   image_url: string;
   category: string;
 }
-const TypedText = () => {
+
+const TypedText = ({ texts }: { texts: string[] }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
 
-  const texts = ["Student", "Coder", "Web Developer", "Problem Solver"];
-
   useEffect(() => {
+    if (texts.length === 0) return;
+    
     const currentFullText = texts[currentTextIndex];
 
     if (isTyping) {
@@ -99,11 +101,14 @@ const TypedText = () => {
 
 const Portfolio = () => {
   const { toast } = useToast();
+  const { getSetting, getSettingAsArray, loading: settingsLoading } = useSiteSettings();
+  
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -112,11 +117,12 @@ const Portfolio = () => {
       [e.target.name]: e.target.value,
     });
   };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     toast({
       title: "Message not sent!",
-      description: "Thank you for your time. This feature is comming soon",
+      description: "Thank you for your time. This feature is coming soon",
     });
     setFormData({
       name: "",
@@ -124,6 +130,7 @@ const Portfolio = () => {
       message: "",
     });
   };
+
   const [projects, setProjects] = useState<Project[]>([]);
   const [graphicsDesigns, setGraphicsDesigns] = useState<GraphicsDesign[]>([]);
 
@@ -188,48 +195,50 @@ const Portfolio = () => {
   ];
 
   const displayProjects = projects.length > 0 ? projects : fallbackProjects;
-  const skills = [
-    {
-      name: "JavaScript",
-      icon: <Code className="w-5 h-5" />,
-    },
-    {
-      name: "React",
-      icon: <Globe className="w-5 h-5" />,
-    },
-    {
-      name: "Node.js",
-      icon: <Server className="w-5 h-5" />,
-    },
-    {
-      name: "MongoDB",
-      icon: <Database className="w-5 h-5" />,
-    },
-    {
-      name: "Express",
-      icon: <Cpu className="w-5 h-5" />,
-    },
-    {
-      name: "TypeScript",
-      icon: <Code className="w-5 h-5" />,
-    },
-    {
-      name: "Python",
-      icon: <Cpu className="w-5 h-5" />,
-    },
-    {
-      name: "PostgreSQL",
-      icon: <Database className="w-5 h-5" />,
-    },
-    {
-      name: "React Native",
-      icon: <Smartphone className="w-5 h-5" />,
-    },
-    {
-      name: "Docker",
-      icon: <Server className="w-5 h-5" />,
-    },
-  ];
+  
+  // Get dynamic settings
+  const name = getSetting('name', 'Karan Kumar Kamat');
+  const nameParts = name.split(' ');
+  const firstName = nameParts[0];
+  const middleName = nameParts.length > 2 ? nameParts[1] : '';
+  const lastName = nameParts.length > 2 ? nameParts[2] : nameParts[1] || '';
+  
+  const typedTexts = getSettingAsArray('typed_texts', ['Student', 'Coder', 'Web Developer', 'Problem Solver']);
+  const skillNames = getSettingAsArray('skills', ['JavaScript', 'React', 'Node.js', 'MongoDB', 'Express', 'TypeScript', 'Python', 'PostgreSQL', 'React Native', 'Docker']);
+  
+  const bioIntro = getSetting('bio_intro', 'Hello! I\'m Karan Kumar Kamat from Dhanpalthan-7, Kamalpur, Nepal. I completed Diploma in Computer Engineering from Adarsha Secondary School which is located at Biratnagar-7.');
+  const bioPassion = getSetting('bio_passion', 'Computer Engineering graduate passionate about solving complex problems with elegant solutions. I live for those "Aha!" moments when debugging code at 2 AM.');
+  const bioHobby = getSetting('bio_hobby', 'When I\'m not optimizing algorithms, you\'ll find me exploring the latest tech trends or building something cool that probably nobody asked for (but everyone ends up loving).');
+  
+  const aboutDescription = getSetting('about_description', 'I\'m a passionate developer mastering Data Structures & Algorithms with Java. I believe clean code and optimized algorithms can solve real-world problems.');
+  const aboutActivities = getSetting('about_activities', 'When I\'m not cracking coding problems, you\'ll find me: • Solving challenges on LeetCode & CodeChef • Building projects to sharpen my skills • Sharing my DSA learning journey');
+  const aboutToolkit = getSetting('about_toolkit', 'My Tech Toolkit: Java | Data Structures | Algorithms | OOP | Problem Solving');
+  const resumeUrl = getSetting('resume_url', '/KaranKumarKamat(Resume).pdf');
+  
+  const linkedinUrl = getSetting('linkedin_url', 'https://www.linkedin.com/in/krnkmt/');
+  const githubUrl = getSetting('github_url', 'https://github.com/redcoder-008');
+  const whatsappNumber = getSetting('whatsapp_number', '9779804005610');
+  const twitterUrl = getSetting('twitter_url', 'https://x.com/karankewat_008');
+  const email = getSetting('email', 'redcoder008@gmail.com');
+
+  const skillIcons: { [key: string]: React.ReactNode } = {
+    'JavaScript': <Code className="w-5 h-5" />,
+    'React': <Globe className="w-5 h-5" />,
+    'Node.js': <Server className="w-5 h-5" />,
+    'MongoDB': <Database className="w-5 h-5" />,
+    'Express': <Cpu className="w-5 h-5" />,
+    'TypeScript': <Code className="w-5 h-5" />,
+    'Python': <Cpu className="w-5 h-5" />,
+    'PostgreSQL': <Database className="w-5 h-5" />,
+    'React Native': <Smartphone className="w-5 h-5" />,
+    'Docker': <Server className="w-5 h-5" />,
+  };
+
+  const skills = skillNames.map(skill => ({
+    name: skill,
+    icon: skillIcons[skill] || <Code className="w-5 h-5" />,
+  }));
+
   return (
     <div className="min-h-screen bg-background relative overflow-hidden">
       {/* Cool Effects */}
@@ -244,47 +253,35 @@ const Portfolio = () => {
             <div className="fade-in-up">
               <div className="mb-8">
                 <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6">
-                  Karan
+                  {firstName}
                   <span className="text-primary gradient-text">
                     {" "}
-                    Kumar
+                    {middleName}
                   </span>{" "}
                   <br />
-                  <span className="">Kamat</span>
+                  <span className="">{lastName}</span>
                 </h1>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
                 Hi, It's{" "}
-                <span className="text-primary gradient-text">Karan</span>
+                <span className="text-primary gradient-text">{firstName}</span>
               </h2>
               <p className="text-2xl mb-8 font-medium">
                 <span className="text-white">I'm a </span>
-                <TypedText />
+                <TypedText texts={typedTexts} />
               </p>
 
               <div className="text-muted-foreground space-y-4 mb-8">
-                <p>
-                  Hello! I'm Karan Kumar Kamat from Dhanpalthan-7, Kamalpur,
-                  Nepal. I completed  Diploma in Computer Engineering from
-                  Adarsha Secondary School which is located at Biratnagar-7.
-                </p>
-                <p className="text-base">
-                  Computer Engineering graduate passionate about solving complex
-                  problems with elegant solutions. I live for those "Aha!"
-                  moments when debugging code at 2 AM.
-                </p>
-                <p className="text-base">
-                  When I'm not optimizing algorithms, you'll find me exploring
-                  the latest tech trends or building something cool that
-                  probably nobody asked for (but everyone ends up loving).
-                </p>
+                <p>{bioIntro}</p>
+                <p className="text-base">{bioPassion}</p>
+                <p className="text-base">{bioHobby}</p>
               </div>
 
               {/* Social Links */}
               <div className="flex gap-4 mb-8">
                 <a
-                  href="https://www.linkedin.com/in/krnkmt/"
+                  href={linkedinUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors"
@@ -292,7 +289,7 @@ const Portfolio = () => {
                   <Linkedin className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://github.com/redcoder-008"
+                  href={githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors"
@@ -300,7 +297,7 @@ const Portfolio = () => {
                   <Github className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://wa.me/9779804005610"
+                  href={`https://wa.me/${whatsappNumber}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors"
@@ -308,7 +305,7 @@ const Portfolio = () => {
                   <MessageCircle className="w-5 h-5" />
                 </a>
                 <a
-                  href="https://x.com/karankewat_008"
+                  href={twitterUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-colors"
@@ -318,12 +315,12 @@ const Portfolio = () => {
               </div>
 
               <div className="flex gap-4">
-                <a href="mailto:redcoder008@gmail.com.com?subject=Hiring Inquiry">
+                <a href={`mailto:${email}?subject=Hiring Inquiry`}>
                   <Button className="bg-primary hover:bg-primary/80 text-primary-foreground px-6 py-3 rounded-full">
                     Hire
                   </Button>{" "}
                 </a>
-                <a href="https://wa.me/9779804005610">
+                <a href={`https://wa.me/${whatsappNumber}`}>
                   <Button
                     variant="outline"
                     className="border-primary text-primary hover:bg-primary hover:text-primary-foreground px-6 py-3 rounded-full"
@@ -340,7 +337,7 @@ const Portfolio = () => {
                 <div className="w-80 h-80 rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl float-animation glow-animation">
                   <img
                     src={karanPhoto}
-                    alt="Karan Kumar Kamat - Computer Engineering Student"
+                    alt={`${name} - Computer Engineering Student`}
                     className="w-full h-full object-cover"
                   />
                 </div>
@@ -366,21 +363,16 @@ const Portfolio = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="fade-in-up">
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  I'm a passionate developer mastering Data Structures &
-                  Algorithms with Java. I believe clean code and optimized
-                  algorithms can solve real-world problems.
+                  {aboutDescription}
                 </p>
                 <p className="text-lg text-muted-foreground mb-6 text-left">
-                  When I'm not cracking coding problems, you'll find me: •
-                  Solving challenges on LeetCode & CodeChef • Building projects
-                  to sharpen my skills • Sharing my DSA learning journey
+                  {aboutActivities}
                 </p>
                 <p className="text-lg text-muted-foreground mb-8 text-left">
-                  My Tech Toolkit: Java | Data Structures | Algorithms | OOP |
-                  Problem Solving |
+                  {aboutToolkit}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <a href="/KaranKumarKamat(Resume).pdf " download>
+                  <a href={resumeUrl} download>
                     <Button className="btn-hero">
                       <Download className="w-4 h-4 mr-2" />
                       Download Resume
@@ -590,7 +582,7 @@ const Portfolio = () => {
                     <div>
                       <p className="font-medium">Email</p>
                       <p className="text-muted-foreground">
-                        redcoder008@gmail.com
+                        {email}
                       </p>
                     </div>
                   </div>
@@ -602,12 +594,12 @@ const Portfolio = () => {
                     <div>
                       <p className="font-medium">GitHub</p>
                       <a
-                        href="https://github.com/redcoder-008"
+                        href={githubUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-accent transition-colors"
                       >
-                        github.com/redcoder-008
+                        {githubUrl.replace('https://', '')}
                       </a>
                     </div>
                   </div>
@@ -619,12 +611,12 @@ const Portfolio = () => {
                     <div>
                       <p className="font-medium">LinkedIn</p>
                       <a
-                        href="https://www.linkedin.com/in/krnkmt/"
+                        href={linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-accent transition-colors"
                       >
-                        linkedin.com/in/krnkmt
+                        {linkedinUrl.replace('https://www.', '')}
                       </a>
                     </div>
                   </div>
@@ -636,12 +628,12 @@ const Portfolio = () => {
                     <div>
                       <p className="font-medium">Twitter</p>
                       <a
-                        href="https://x.com/karankewat_008"
+                        href={twitterUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-accent transition-colors"
                       >
-                        @karankewat_008
+                        {twitterUrl.replace('https://x.com/', '@')}
                       </a>
                     </div>
                   </div>
@@ -653,12 +645,12 @@ const Portfolio = () => {
                     <div>
                       <p className="font-medium">WhatsApp </p>
                       <a
-                        href="https://wa.me/9779804005610"
+                        href={`https://wa.me/${whatsappNumber}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-muted-foreground hover:text-green-500 transition-colors"
                       >
-                        +977 980-400-5610
+                        +{whatsappNumber.slice(0, 3)} {whatsappNumber.slice(3, 6)}-{whatsappNumber.slice(6, 9)}-{whatsappNumber.slice(9)}
                       </a>
                     </div>
                   </div>
@@ -720,7 +712,7 @@ const Portfolio = () => {
         <div className="container-custom">
           <div className="text-center">
             <p className="text-muted-foreground">
-              © Karan Kumar Kamat. Built with React & Tailwind CSS.
+              © {name}. Built with React & Tailwind CSS.
             </p>
           </div>
         </div>
