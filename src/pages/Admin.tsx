@@ -9,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/integrations/supabase/client';
-import { Plus, Trash2, Edit2, Save, X, LogOut, Upload, Eye, EyeOff, Image, FolderOpen } from 'lucide-react';
+import { Plus, Trash2, Edit2, Save, X, LogOut, Upload, Eye, EyeOff, Image, FolderOpen, Settings } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -33,6 +33,13 @@ interface GraphicsDesign {
   is_visible: boolean;
 }
 
+interface SiteSetting {
+  id: string;
+  key: string;
+  value: string;
+  category: string;
+}
+
 const Admin = () => {
   const { user, isAdmin, loading, signOut } = useAuth();
   const navigate = useNavigate();
@@ -40,8 +47,10 @@ const Admin = () => {
   
   const [projects, setProjects] = useState<Project[]>([]);
   const [designs, setDesigns] = useState<GraphicsDesign[]>([]);
+  const [siteSettings, setSiteSettings] = useState<SiteSetting[]>([]);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [editingDesign, setEditingDesign] = useState<GraphicsDesign | null>(null);
+  const [editingSettings, setEditingSettings] = useState<{ [key: string]: string }>({});
   const [newProject, setNewProject] = useState({
     title: '',
     description: '',
@@ -67,6 +76,7 @@ const Admin = () => {
     if (user && isAdmin) {
       fetchProjects();
       fetchDesigns();
+      fetchSiteSettings();
     }
   }, [user, isAdmin]);
 
@@ -89,6 +99,22 @@ const Admin = () => {
     
     if (!error && data) {
       setDesigns(data);
+    }
+  };
+
+  const fetchSiteSettings = async () => {
+    const { data, error } = await supabase
+      .from('site_settings')
+      .select('*')
+      .order('category');
+    
+    if (!error && data) {
+      setSiteSettings(data);
+      const settingsMap: { [key: string]: string } = {};
+      data.forEach((s) => {
+        settingsMap[s.key] = s.value;
+      });
+      setEditingSettings(settingsMap);
     }
   };
 
@@ -217,6 +243,57 @@ const Admin = () => {
     fetchDesigns();
   };
 
+  const handleUpdateSetting = async (key: string) => {
+    const { error } = await supabase
+      .from('site_settings')
+      .update({ value: editingSettings[key] })
+      .eq('key', key);
+
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Success", description: `${key} updated!` });
+      fetchSiteSettings();
+    }
+  };
+
+  const handleSaveAllSettings = async () => {
+    const updates = Object.entries(editingSettings).map(([key, value]) => 
+      supabase.from('site_settings').update({ value }).eq('key', key)
+    );
+    
+    await Promise.all(updates);
+    toast({ title: "Success", description: "All settings saved!" });
+    fetchSiteSettings();
+  };
+
+  const getSettingsByCategory = (category: string) => {
+    return siteSettings.filter(s => s.category === category);
+  };
+
+  const getSettingLabel = (key: string): string => {
+    const labels: { [key: string]: string } = {
+      name: 'Full Name',
+      title: 'Professional Title',
+      location: 'Location',
+      bio_intro: 'Bio Introduction',
+      bio_passion: 'Bio Passion',
+      bio_hobby: 'Bio Hobbies',
+      about_description: 'About Description',
+      about_activities: 'About Activities',
+      about_toolkit: 'Tech Toolkit',
+      resume_url: 'Resume URL/Path',
+      linkedin_url: 'LinkedIn URL',
+      github_url: 'GitHub URL',
+      whatsapp_number: 'WhatsApp Number',
+      twitter_url: 'Twitter/X URL',
+      email: 'Email Address',
+      skills: 'Skills (JSON Array)',
+      typed_texts: 'Typed Texts (JSON Array)',
+    };
+    return labels[key] || key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -258,11 +335,106 @@ const Admin = () => {
           </div>
         </div>
 
-        <Tabs defaultValue="projects">
+        <Tabs defaultValue="settings">
           <TabsList className="mb-6">
+            <TabsTrigger value="settings">Site Settings</TabsTrigger>
             <TabsTrigger value="projects">Projects</TabsTrigger>
             <TabsTrigger value="graphics">Graphics Designs</TabsTrigger>
           </TabsList>
+
+          <TabsContent value="settings">
+            <div className="space-y-6">
+              {/* Personal Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Settings className="w-5 h-5" /> Personal Information
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {getSettingsByCategory('personal').map((setting) => (
+                    <div key={setting.key} className="space-y-2">
+                      <label className="text-sm font-medium">{getSettingLabel(setting.key)}</label>
+                      {setting.key === 'bio_intro' || setting.key === 'bio_passion' || setting.key === 'bio_hobby' ? (
+                        <Textarea
+                          value={editingSettings[setting.key] || ''}
+                          onChange={(e) => setEditingSettings({ ...editingSettings, [setting.key]: e.target.value })}
+                          rows={3}
+                        />
+                      ) : (
+                        <Input
+                          value={editingSettings[setting.key] || ''}
+                          onChange={(e) => setEditingSettings({ ...editingSettings, [setting.key]: e.target.value })}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* About Section */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>About Section</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {getSettingsByCategory('about').map((setting) => (
+                    <div key={setting.key} className="space-y-2">
+                      <label className="text-sm font-medium">{getSettingLabel(setting.key)}</label>
+                      <Textarea
+                        value={editingSettings[setting.key] || ''}
+                        onChange={(e) => setEditingSettings({ ...editingSettings, [setting.key]: e.target.value })}
+                        rows={setting.key === 'resume_url' ? 1 : 3}
+                      />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Social Links */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Social Links & Contact</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {getSettingsByCategory('social').map((setting) => (
+                    <div key={setting.key} className="space-y-2">
+                      <label className="text-sm font-medium">{getSettingLabel(setting.key)}</label>
+                      <Input
+                        value={editingSettings[setting.key] || ''}
+                        onChange={(e) => setEditingSettings({ ...editingSettings, [setting.key]: e.target.value })}
+                      />
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              {/* Skills */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Skills</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {getSettingsByCategory('skills').map((setting) => (
+                    <div key={setting.key} className="space-y-2">
+                      <label className="text-sm font-medium">{getSettingLabel(setting.key)}</label>
+                      <Textarea
+                        value={editingSettings[setting.key] || ''}
+                        onChange={(e) => setEditingSettings({ ...editingSettings, [setting.key]: e.target.value })}
+                        rows={2}
+                        placeholder='["Skill 1", "Skill 2", "Skill 3"]'
+                      />
+                      <p className="text-xs text-muted-foreground">Enter as JSON array: ["JavaScript", "React", "Node.js"]</p>
+                    </div>
+                  ))}
+                </CardContent>
+              </Card>
+
+              <Button onClick={handleSaveAllSettings} className="w-full">
+                <Save className="w-4 h-4 mr-2" /> Save All Settings
+              </Button>
+            </div>
+          </TabsContent>
 
           <TabsContent value="projects">
             <Card className="mb-6">
